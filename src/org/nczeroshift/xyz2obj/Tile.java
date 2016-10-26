@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.TreeMap;
 
 public class Tile {
@@ -66,8 +67,8 @@ public class Tile {
         return null;
     }
 
-    public void saveOBJ(File filename, Coordinate center, Double scale, Integer span, Integer subdivision) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+    public void saveOBJ(File folder, Coordinate center, Double scale, Integer span, Integer subdivision) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(folder,"out.obj")));
 
         Double tSize = Utils.getTileSizeAtLatitude(0.0, level);
         int cx = (int)Math.floor(center.getX());
@@ -104,10 +105,13 @@ public class Tile {
             }
         }
 
+        HashSet<String> mtlKeys = new HashSet<String>();
+
         int vCount = 0;
         for(int x_i = cx - span;x_i <= cx + span; x_i++) {
             for (int y_i = cy - span; y_i <= cy + span; y_i++) {
                 String key = x_i + "_" + y_i;
+                mtlKeys.add(key);
                 writer.write("usemtl " + key+"\n");
                 for (int x = 0; x < subdivision-1; x++) {
                     for (int y = 0; y < subdivision-1; y++) {
@@ -132,6 +136,16 @@ public class Tile {
         }
 
         writer.close();
+
+        BufferedWriter mtlWriter = new BufferedWriter(new FileWriter(new File(folder,"out.mtl")));
+
+        for(String keys : mtlKeys){
+            mtlWriter.write("newmtl "+keys+"\n");
+            mtlWriter.write("map_Kd "+keys+".png\n");
+            mtlWriter.write("\n");
+        }
+
+        mtlWriter.close();
     }
 
 

@@ -49,7 +49,7 @@ public class Main {
             outputFolder.mkdir();
 
         System.out.println("Generating obj ...");
-        t.saveOBJ(new File(outputFolder,"out.obj"),targetTileC,scale,marginTiles,subdivision);
+        t.saveOBJ(outputFolder,targetTileC,scale,marginTiles,subdivision);
 
         if(strSaveTextureTiles.equals("true")) {
             System.out.println("Generating texture ...");

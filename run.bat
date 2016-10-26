@@ -1,0 +1,1 @@
+java -jar bin/xyz2obj.jar elevation.xyz 0.01 1 41.015070 -8.341233 16 output false
